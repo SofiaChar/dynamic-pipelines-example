@@ -29,7 +29,7 @@ for model_path in model_paths_all:
 
     # Pick 5 random images from test set to save with the predicted cateogory
     test_img = []
-    for i in range(0, 5):
+    for i in range(0, 3):
         y = random.randrange(len(test_data))
         test_img.append(y)
 
