@@ -1,0 +1,83 @@
+- step:
+    name: preprocess-dataset
+    #image: tensorflow/tensorflow:2.6.0-gpu
+    image: gcr.io/kaggle-gpu-images/python
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    command:
+    #- pip install valohai-utils scikit-learn numpy pandas opencv-python
+    - pip install valohai-utils
+    - python ./preprocess.py
+    inputs:
+      - name: dataset
+        default: s3://valohai-demo-library-data/dynamic-pipelines/train/images/*
+      - name: labels
+        default: s3://valohai-demo-library-data/dynamic-pipelines/train/{parameter-value:dataset_name}.csv
+    parameters:
+        - name: dataset_name
+          default: "train"
+          type: string
+          optional: true
+
+- step:
+    name: train-model
+    image: tensorflow/tensorflow:2.6.0-gpu
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    command:
+    - pip install valohai-utils
+    - python ./train_model.py {parameters}
+    parameters:
+      - name: epochs
+        default: 25
+        type: integer
+      - name: learning_rate
+        default: 0.001
+        type: float
+      - name: batch_size
+        default: 512
+        type: integer
+      - name: dataset_name
+        optional: true
+    inputs:
+      - name: dataset
+        optional: true
+
+- step:
+    name: predict
+    image: tensorflow/tensorflow:2.6.0
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    command:
+    - pip install valohai-utils matplotlib
+    - python ./predict.py
+    inputs:
+    - name: model
+    - name: test_dataset
+
+- pipeline:
+    name: training-pipeline
+    parameters:
+      - name: dataset
+        targets:
+          - preprocess.parameter.dataset_name
+        default: "train"
+    nodes:
+      - name: preprocess
+        type: execution
+        step: preprocess-dataset
+      - name: train
+        type: execution
+        step: train-model
+        override:
+          inputs:
+            - name: dataset
+      - name: predictions
+        type: execution
+        step: predict
+        override:
+          inputs:
+            - name: test_dataset
+            - name: model
+    edges:
+      - [preprocess.output.preprocessed_data.npz, train.input.dataset]
+      - [preprocess.parameter.dataset_name, train.parameter.dataset_name]
+      - [preprocess.output.test/preprocessed_test_data.npz, predictions.input.test_dataset]
+      - [train.output.*.h5, predictions.input.model]
