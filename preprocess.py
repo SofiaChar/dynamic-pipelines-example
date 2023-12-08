@@ -26,11 +26,11 @@ elif valohai.parameters('dataset_name').value ==  "train_harbor_B":
     test_images= data[7146:8041]
 elif valohai.parameters('dataset_name').value ==  "train_harbor_C":
     train_images = data[4170:6252]
-    test_images= data[8041:8935]
+    test_images= data[8041:]
 else:
     print("Invalid dataset name.")
 
-preprocess = ImagePreprocessing(train_images , test_images , height=150 , length= 6252 , dataframe=rcsv)
+preprocess = ImagePreprocessing(train_images , test_images , height=150 , length= len(data) , dataframe=rcsv)
 rez_images , LABELS , test_rez_images = preprocess.Reshape()
 onehot_labels = preprocess.OneHot(LABELS)
 X_train , X_val , Y_train , Y_val = preprocess.splitdata(rez_images , onehot_labels )
