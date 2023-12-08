@@ -30,7 +30,7 @@ elif valohai.parameters('dataset_name').value ==  "train_harbor_C":
 else:
     print("Invalid dataset name.")
 
-preprocess = ImagePreprocessing(train_images , test_images , height=150 , length= len(data) , dataframe=rcsv)
+preprocess = ImagePreprocessing(train_images , test_images , height=150 , length=len(train_images) , dataframe=rcsv)
 rez_images , LABELS , test_rez_images = preprocess.Reshape()
 onehot_labels = preprocess.OneHot(LABELS)
 X_train , X_val , Y_train , Y_val = preprocess.splitdata(rez_images , onehot_labels )
