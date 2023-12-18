@@ -5,7 +5,7 @@ import os
 from utils.model import load_model
 import valohai
 
-
+# Define that data and model paths
 path = valohai.inputs("test_dataset").path()
 model_paths_all = valohai.inputs('model').paths()
 
@@ -17,6 +17,7 @@ category = {'Cargo': 1,
 'Cruise': 4, 
 'Tankers': 5}
 
+# Run predictions for all models provided as inputs
 for model_path in model_paths_all:
     model = load_model(model_path)
     head, tail = os.path.split(model_path)
@@ -27,7 +28,7 @@ for model_path in model_paths_all:
 
     predictions = model.predict(test_data)
 
-    # Pick 5 random images from test set to save with the predicted cateogory
+    # Pick 3 random images from test set to save with the predicted cateogory
     test_img = []
     for i in range(0, 3):
         y = random.randrange(len(test_data))

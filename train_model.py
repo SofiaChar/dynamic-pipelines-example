@@ -1,10 +1,8 @@
 import numpy as np # linear algebra
 from keras.models import Sequential
-from keras.layers import BatchNormalization , Conv2D , Dense , Flatten , MaxPool2D , Dropout
+from keras.layers import BatchNormalization , Conv2D , Dense , Flatten , MaxPool2D
 #from keras.optimizers import Adam
 from tensorflow.keras.optimizers import Adam
-import warnings
-warnings.filterwarnings('ignore')
 import valohai
 import uuid
 
@@ -42,6 +40,7 @@ history=model.fit(x_train,y_train,validation_data=(x_val,y_val),
                   batch_size=valohai.parameters('batch_size').value,
                   epochs=valohai.parameters('epochs').value)
 
+# Save the trained model
 suffix = uuid.uuid4()
 output_path = valohai.outputs().path(f'model-{suffix}.h5')
 model.save(output_path)

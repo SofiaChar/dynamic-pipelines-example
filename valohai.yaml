@@ -1,11 +1,8 @@
 - step:
     name: preprocess-dataset
-    #image: tensorflow/tensorflow:2.6.0-gpu
-    image: gcr.io/kaggle-gpu-images/python
+    image: docker.io/noorai/dynamic-pipelines-demo:0.1
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
-    #- pip install valohai-utils scikit-learn numpy pandas opencv-python
-    - pip install valohai-utils
     - python ./preprocess.py
     inputs:
       - name: dataset
@@ -20,10 +17,9 @@
 
 - step:
     name: train-model
-    image: tensorflow/tensorflow:2.6.0-gpu
+    image: docker.io/noorai/dynamic-pipelines-demo:0.1
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
-    - pip install valohai-utils
     - python ./train_model.py {parameters}
     parameters:
       - name: epochs
@@ -43,10 +39,9 @@
 
 - step:
     name: predict
-    image: tensorflow/tensorflow:2.6.0
+    image: docker.io/noorai/dynamic-pipelines-demo:0.1
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
-    - pip install valohai-utils matplotlib
     - python ./predict.py
     inputs:
     - name: model
@@ -72,6 +67,9 @@
       - name: predictions
         type: execution
         step: predict
+        actions:
+          - when: node-starting
+            then: require-approval
         override:
           inputs:
             - name: test_dataset
