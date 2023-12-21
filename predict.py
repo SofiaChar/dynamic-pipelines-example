@@ -9,6 +9,7 @@ import valohai
 #path = valohai.inputs("test_dataset").paths()
 model_paths_all = valohai.inputs('model').paths()
 dataset_names = valohai.parameters('dataset_names').value
+print(dataset_names)
 
 # Possible ship categories
 category = {'Cargo': 1, 
@@ -20,7 +21,7 @@ category = {'Cargo': 1,
 for dataset in dataset_names:
     path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
     print(path)
-    
+
     # Run predictions for all models provided as inputs
     for model_path in model_paths_all:
         print(dataset + " " + model_path)
