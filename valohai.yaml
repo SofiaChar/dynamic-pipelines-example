@@ -1,8 +1,8 @@
 - step:
     name: preprocess-dataset
     image: docker.io/noorai/dynamic-pipelines-demo:0.1
-    #environment: staging-aws-eu-west-1-g4dn-xlarge
-    environment: azure-westeurope-f2sv2-spot
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    #environment: azure-westeurope-f2sv2-spot
     command:
     - python ./preprocess.py
     inputs:
@@ -70,7 +70,7 @@
         type: task
         step: train-model
       - name: predictions
-        type: execution
+        type: task
         step: predict
         actions:
           - when: node-starting
