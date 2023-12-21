@@ -87,5 +87,5 @@
     edges:
       - [preprocess.output.preprocessed_data.npz, train.input.dataset]
       - [preprocess.metadata.run_training_for, train.parameter.dataset_name]
-      - [preprocess.output.test/*, predict.input.test_dataset]
+      - [preprocess.output.test/*, predictions.input.test_dataset]
       - [train.output.*.h5, predictions.input.model]
