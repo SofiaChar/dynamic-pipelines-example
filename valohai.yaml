@@ -57,6 +57,7 @@
     inputs:
     - name: model
     - name: test_dataset
+      keep-directories: "suffix"
 
 - pipeline:
     name: training-pipeline
