@@ -65,7 +65,7 @@
       - name: dataset
         targets:
           - preprocess.parameter.dataset_names
-          - predict.parameter.dataset_names
+          - predictions.parameter.dataset_names
         default: [all_harbors, harbor_A]
     nodes:
       - name: preprocess
