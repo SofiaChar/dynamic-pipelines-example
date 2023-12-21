@@ -56,14 +56,14 @@ for dataset in dataset_names:
         json.dump(metadata_train, outfile)
 
     # Save preprocessed test data
-    path_test_data = valohai.outputs('test' + dataset + '/').path('preprocessed_test_data_' + dataset +'.npz')
+    path_test_data = valohai.outputs('test/' + dataset + '/').path('preprocessed_test_data_' + dataset +'.npz')
     np.savez_compressed(path_test_data, test_data=test_rez_images)
 
     metadata_test = {
         'valohai.dataset-versions': ['dataset://'+ dataset + '_test/'+ exec_id]
     }
     
-    metadata_path = valohai.outputs('test' + dataset + '/').path('preprocessed_test_data_' + dataset +'.npz.metadata.json')
+    metadata_path = valohai.outputs('test/' + dataset + '/').path('preprocessed_test_data_' + dataset +'.npz.metadata.json')
     with open(metadata_path, 'w') as outfile:
         json.dump(metadata_test, outfile)
 
