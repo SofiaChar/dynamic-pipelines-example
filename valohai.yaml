@@ -48,8 +48,12 @@
     command:
     - python ./predict.py
     parameters:
-    - name: dataset_name
-      optional: true
+        - name: dataset_names
+          default: [all_harbors]
+          type: string
+          multiple: separate
+          multiple-separator: ','
+          optional: false
     inputs:
     - name: model
     - name: test_dataset
@@ -61,6 +65,7 @@
       - name: dataset
         targets:
           - preprocess.parameter.dataset_names
+          - predict.parameter.dataset_names
         default: [all_harbors, harbor_A]
     nodes:
       - name: preprocess
@@ -70,7 +75,7 @@
         type: task
         step: train-model
       - name: predictions
-        type: task
+        type: execution
         step: predict
         actions:
           - when: node-starting
@@ -80,7 +85,7 @@
             - name: test_dataset
             - name: model
     edges:
-      #- [preprocess.output.preprocessed_data.npz, train.input.dataset]
+      - [preprocess.output.preprocessed_data.npz, train.input.dataset]
       - [preprocess.metadata.run_training_for, train.parameter.dataset_name]
-      - [preprocess.metadata.run_training_for, predictions.parameter.dataset_name]
+      - [preprocess.output.test/*, predict.input.test_dataset]
       - [train.output.*.h5, predictions.input.model]

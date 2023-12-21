@@ -42,5 +42,7 @@ history=model.fit(x_train,y_train,validation_data=(x_val,y_val),
 
 # Save the trained model
 suffix = uuid.uuid4()
-output_path = valohai.outputs().path(f'model-{suffix}.h5')
+#output_path = valohai.outputs().path(f'model-{suffix}.h5')
+dataset_name = valohai.parameters('dataset_name').value
+output_path = valohai.outputs().path(f'model-' + dataset_name + '.h5')
 model.save(output_path)
