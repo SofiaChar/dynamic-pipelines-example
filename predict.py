@@ -6,11 +6,7 @@ from utils.model import load_model
 import valohai
 
 # Define that data and model paths
-#path = valohai.inputs("test_dataset").paths()
-model_paths_all = valohai.inputs('model').paths()
 dataset_names = valohai.parameters('dataset_names').value
-print(dataset_names[0])
-print(dataset_names[1])
 
 # Possible ship categories
 category = {'Cargo': 1, 
@@ -22,14 +18,10 @@ category = {'Cargo': 1,
 for dataset in dataset_names:
     path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
     model_paths_all = valohai.inputs('model').paths()
-    print(path)
-    print("dataset: " + dataset)
 
     # Run predictions for all models provided as inputs
     for model_path in model_paths_all:
-        print(dataset + " " + model_path)
         if dataset in model_path:
-            print(model_path)
             model = load_model(model_path)
             head, tail = os.path.split(model_path)
             model_name = tail.rstrip(".h5")
@@ -48,10 +40,15 @@ for dataset in dataset_names:
     # Save images and predictions
     for i in test_img: 
         plt.imshow(test_data[i])
+
+        category = {'Cargo': 1, 
+        'Military': 2, 
+        'Carrier': 3, 
+        'Cruise': 4, 
+        'Tankers': 5}
         
         for key in category:
             if category[key] == np.argmax(predictions[i])+1:
+                print(str(category[key]) + " " + str(np.argmax(predictions[i])+1))
                 im_path = "predictions/"+model_name+"/" + "img" + str(i) + "_" + key
                 plt.savefig(valohai.outputs().path(im_path))
-    
-    del model_path
