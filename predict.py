@@ -23,7 +23,8 @@ for dataset in dataset_names:
     print(path)
 
     # Run predictions for all models provided as inputs
-    for model_path in model_paths_all:
+    for mdl_path in model_paths_all:
+        model_path = mdl_path
         print(dataset + " " + model_path)
         if dataset in model_path:
             print(model_path)
