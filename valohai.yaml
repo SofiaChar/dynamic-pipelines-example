@@ -47,9 +47,13 @@
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
     - python ./predict.py
+    parameters:
+    - name: dataset_name
+      optional: true
     inputs:
     - name: model
     - name: test_dataset
+      default: dataset://{parameter:dataset_name}_test/latest
 
 - pipeline:
     name: training-pipeline
@@ -65,9 +69,6 @@
       - name: train
         type: task
         step: train-model
-        #override:
-        #  inputs:
-        #    - name: dataset
       - name: predictions
         type: execution
         step: predict
@@ -81,5 +82,5 @@
     edges:
       #- [preprocess.output.preprocessed_data.npz, train.input.dataset]
       - [preprocess.metadata.run_training_for, train.parameter.dataset_name]
-      - [preprocess.output.test/*.npz, predictions.input.test_dataset]
+      - [preprocess.metadata.run_training_for, predictions.parameter.dataset_name]
       - [train.output.*.h5, predictions.input.model]
