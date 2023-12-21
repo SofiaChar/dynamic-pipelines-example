@@ -6,7 +6,7 @@ from utils.model import load_model
 import valohai
 
 # Define that data and model paths
-path = valohai.inputs("test_dataset").paths()
+#path = valohai.inputs("test_dataset").paths()
 model_paths_all = valohai.inputs('model').paths()
 dataset_names = valohai.parameters('dataset_names').value
 
@@ -18,7 +18,7 @@ category = {'Cargo': 1,
 'Tankers': 5}
 
 for dataset in dataset_names:
-    path = valohai.inputs('test_dataset').paths(dataset+'/')
+    path = valohai.inputs('test_dataset').path(dataset+'/*')
 
     # Run predictions for all models provided as inputs
     for model_path in model_paths_all:
