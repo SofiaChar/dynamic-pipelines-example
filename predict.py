@@ -52,3 +52,5 @@ for dataset in dataset_names:
             if category[key] == np.argmax(predictions[i])+1:
                 im_path = "predictions/"+model_name+"/" + "img" + str(i) + "_" + key
                 plt.savefig(valohai.outputs().path(im_path))
+    
+    del model_path
