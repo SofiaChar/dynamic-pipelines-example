@@ -30,7 +30,6 @@ for dataset in dataset_names:
         test_data = f['test_data']
 
     predictions = model.predict(test_data)
-    print(predictions[:5])
 
     # Pick 3 random images from test set to save with the predicted cateogory
     test_img = []
@@ -42,11 +41,7 @@ for dataset in dataset_names:
     for i in test_img: 
         plt.imshow(test_data[i])
 
-        category = {'Cargo': 1, 
-        'Military': 2, 
-        'Carrier': 3, 
-        'Cruise': 4, 
-        'Tankers': 5}
+        print(predictions[i])
         
         for key in category:
             if category[key] == np.argmax(predictions[i])+1:
