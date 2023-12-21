@@ -18,11 +18,13 @@ category = {'Cargo': 1,
 'Tankers': 5}
 
 for dataset in dataset_names:
-    path = valohai.inputs('test_dataset').path('test'/+dataset+'/*')
+    path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
+    print(path)
 
     # Run predictions for all models provided as inputs
     for model_path in model_paths_all:
         if dataset in model_path:
+            print(model_path)
             model = load_model(model_path)
             head, tail = os.path.split(model_path)
             model_name = tail.rstrip(".h5")
