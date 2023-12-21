@@ -1,19 +1,22 @@
 - step:
     name: preprocess-dataset
     image: docker.io/noorai/dynamic-pipelines-demo:0.1
-    environment: staging-aws-eu-west-1-g4dn-xlarge
+    #environment: staging-aws-eu-west-1-g4dn-xlarge
+    environment: azure-westeurope-f2sv2-spot
     command:
     - python ./preprocess.py
     inputs:
       - name: dataset
-        default: s3://valohai-demo-library-data/dynamic-pipelines/train/images/*
+        default: s3://valohai-demo-library-data/dynamic-pipelines/train/images.zip
       - name: labels
-        default: s3://valohai-demo-library-data/dynamic-pipelines/train/{parameter-value:dataset_name}.csv
+        default: s3://valohai-demo-library-data/dynamic-pipelines/train/*.csv
     parameters:
-        - name: dataset_name
-          default: "train"
+        - name: dataset_names
+          default: [all_harbors, harbor_A]
           type: string
-          optional: true
+          multiple: separate
+          multiple-separator: ','
+          optional: false
 
 - step:
     name: train-model
@@ -35,6 +38,7 @@
         optional: true
     inputs:
       - name: dataset
+        default: dataset://{parameter:dataset_name}_train/latest
         optional: true
 
 - step:
@@ -52,18 +56,18 @@
     parameters:
       - name: dataset
         targets:
-          - preprocess.parameter.dataset_name
-        default: "train"
+          - preprocess.parameter.dataset_names
+        default: [all_harbors, harbor_A]
     nodes:
       - name: preprocess
         type: execution
         step: preprocess-dataset
       - name: train
-        type: execution
+        type: task
         step: train-model
-        override:
-          inputs:
-            - name: dataset
+        #override:
+        #  inputs:
+        #    - name: dataset
       - name: predictions
         type: execution
         step: predict
@@ -75,7 +79,7 @@
             - name: test_dataset
             - name: model
     edges:
-      - [preprocess.output.preprocessed_data.npz, train.input.dataset]
-      - [preprocess.parameter.dataset_name, train.parameter.dataset_name]
-      - [preprocess.output.test/preprocessed_test_data.npz, predictions.input.test_dataset]
+      #- [preprocess.output.preprocessed_data.npz, train.input.dataset]
+      - [preprocess.metadata.run_training_for, train.parameter.dataset_name]
+      - [preprocess.output.test/*.npz, predictions.input.test_dataset]
       - [train.output.*.h5, predictions.input.model]

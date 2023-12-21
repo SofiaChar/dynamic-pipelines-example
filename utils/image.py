@@ -3,8 +3,6 @@ import numpy as np # linear algebra
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
-import warnings
-warnings.filterwarnings('ignore')
 
 class ImagePreprocessing:
     
