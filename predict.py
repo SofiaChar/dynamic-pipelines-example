@@ -21,6 +21,7 @@ category = {'Cargo': 1,
 
 for dataset in dataset_names:
     path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
+    model_paths_all = valohai.inputs('model').paths()
     print(path)
     print("dataset: " + dataset)
 
