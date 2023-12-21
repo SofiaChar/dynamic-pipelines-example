@@ -30,10 +30,11 @@ for dataset in dataset_names:
         test_data = f['test_data']
 
     predictions = model.predict(test_data)
+    print(predictions[:5])
 
     # Pick 3 random images from test set to save with the predicted cateogory
     test_img = []
-    for i in range(0, 3):
+    for k in range(0, 3):
         y = random.randrange(len(test_data))
         test_img.append(y)
 
