@@ -9,7 +9,8 @@ import valohai
 #path = valohai.inputs("test_dataset").paths()
 model_paths_all = valohai.inputs('model').paths()
 dataset_names = valohai.parameters('dataset_names').value
-print(dataset_names)
+print(dataset_names[0])
+print(dataset_names[1])
 
 # Possible ship categories
 category = {'Cargo': 1, 
@@ -21,10 +22,10 @@ category = {'Cargo': 1,
 for dataset in dataset_names:
     path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
     print(path)
+    print("dataset: " + dataset)
 
     # Run predictions for all models provided as inputs
-    for mdl_path in model_paths_all:
-        model_path = mdl_path
+    for model_path in model_paths_all:
         print(dataset + " " + model_path)
         if dataset in model_path:
             print(model_path)
