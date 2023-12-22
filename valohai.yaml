@@ -2,7 +2,6 @@
     name: preprocess-dataset
     image: docker.io/noorai/dynamic-pipelines-demo:0.1
     environment: staging-aws-eu-west-1-g4dn-xlarge
-    #environment: azure-westeurope-f2sv2-spot
     command:
     - python ./preprocess.py
     inputs:
@@ -12,13 +11,13 @@
         default: s3://valohai-demo-library-data/dynamic-pipelines/train/*.csv
     parameters:
         - name: dataset_names
-          default: [all_harbors, harbor_A]
+          default: [harbor_A]
           type: string
           multiple: separate
           multiple-separator: ','
           optional: false
         - name: val_size
-          default: 0.2
+          default: 0.3
           type: float
 
 - step:
@@ -35,7 +34,7 @@
         default: 0.001
         type: float
       - name: batch_size
-        default: 512
+        default: 64
         type: integer
       - name: dataset_name
         optional: true
