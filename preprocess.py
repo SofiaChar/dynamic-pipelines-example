@@ -28,18 +28,24 @@ for dataset in dataset_names:
 
     train_images=[]
     test_images=[]
+    files_tmp=[]
+    categories_tmp=[]
     for file in data_path:
         head, tail = os.path.split(file)
         if (rcsv.image == tail).any():
+            #print(rcsv[rcsv.image == tail]['category'].values[0])
+            files_tmp.append(tail)
+            categories_tmp.append(rcsv[rcsv.image == tail]['category'].values[0])
             image = cv2.imread(file)
             train_images.append(image)
         elif len(test_images) <= 1000:
             image = cv2.imread(file)
             test_images.append(image)
 
-
+    df = pd.DataFrame(data={'image': files_tmp, 'category': categories_tmp})
+    print(df)
     print("Resizing training and test data...")
-    preprocess = ImagePreprocessing(train_images , test_images , height=150 , length=len(train_images) , dataframe=rcsv)
+    preprocess = ImagePreprocessing(train_images , test_images , height=150 , length=len(train_images) , dataframe=df)
     rez_images , LABELS , test_rez_images = preprocess.Reshape()
 
     print("Findind labels for the images...")
