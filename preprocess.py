@@ -8,7 +8,7 @@ import json
 # Get data paths
 data_path = valohai.inputs("dataset").paths()
 dataset_names = valohai.parameters('dataset_names').value
-test_size = valohai.parameters('test_size').value
+val_size = valohai.parameters('val_size').value
 
 data=[]
 for file in data_path:
@@ -41,7 +41,7 @@ for dataset in dataset_names:
     preprocess = ImagePreprocessing(train_images , test_images , height=150 , length=len(train_images) , dataframe=rcsv)
     rez_images , LABELS , test_rez_images = preprocess.Reshape()
     onehot_labels = preprocess.OneHot(LABELS)
-    X_train , X_val , Y_train , Y_val = preprocess.splitdata(rez_images , onehot_labels, test_size )
+    X_train , X_val , Y_train , Y_val = preprocess.splitdata(rez_images , onehot_labels, val_size )
 
     print('Saving preprocessed data...')
     # Save preprocessed training data
