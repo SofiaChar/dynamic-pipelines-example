@@ -16,6 +16,7 @@ category = {'Cargo': 1,
 'Tankers': 5}
 
 for dataset in dataset_names:
+    print('Running predictions for model trained with dataset: ' + dataset)
     path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
     model_paths_all = valohai.inputs('model').paths()
 
@@ -40,11 +41,9 @@ for dataset in dataset_names:
     # Save images and predictions
     for i in test_img: 
         plt.imshow(test_data[i])
-
-        print(predictions[i])
         
         for key in category:
             if category[key] == np.argmax(predictions[i])+1:
-                print(str(category[key]) + " " + str(np.argmax(predictions[i])+1))
+                print('Predicted ship type: ' + key)
                 im_path = "predictions/"+model_name+"/" + "img" + str(i) + "_" + key
                 plt.savefig(valohai.outputs().path(im_path))
