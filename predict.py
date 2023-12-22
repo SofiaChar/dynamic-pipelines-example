@@ -40,8 +40,6 @@ for dataset in dataset_names:
     # Save images and predictions
     for i in test_img: 
         plt.imshow(test_data[i])
-
-        print(predictions[i])
         
         for key in category:
             if category[key] == np.argmax(predictions[i])+1:

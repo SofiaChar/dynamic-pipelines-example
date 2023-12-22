@@ -48,8 +48,8 @@ class ImagePreprocessing:
     def toarray(self,series):
         return np.array(series)
     
-    def splitdata(self,TRAIN_images, LABELS):
-        X_train , X_val , Y_train , Y_val = train_test_split(TRAIN_images , LABELS , test_size=0.2 , random_state=42)
+    def splitdata(self,TRAIN_images, LABELS, test_size):
+        X_train , X_val , Y_train , Y_val = train_test_split(TRAIN_images , LABELS , test_size, random_state=42)
         return X_train , X_val , Y_train , Y_val
     
     def OneHot(self,x):

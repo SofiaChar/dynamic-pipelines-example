@@ -17,6 +17,9 @@
           multiple: separate
           multiple-separator: ','
           optional: false
+        - name: test_size
+          default: 0.2
+          type: float
 
 - step:
     name: train-model
