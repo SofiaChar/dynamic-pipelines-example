@@ -22,19 +22,36 @@ The customer:
 
 ## How to demo?
 - Start by showing a completed pipeline and talking about the fundamentals.
-- Create a new pipeline with the train node converted to a set of parallel steps in a pipeline (i.e. a Task but let's avoid Valohai jargon). 
-    - Show how to change parameters, input dataset, environment...
-    - Reuse the preprocess node from an earlier pipeline as that will take some time to run. 
-    - Mention that reusing the nodes is relevant mainly for dev and debugging.
-- Launch the pipeline and let it run until the human approval.
+    - See the cheat sheet below.  
 - Go to the YAML file in Github and show the pipeline, mention that you will share it after the call. 
+    - DISCLAIMER: If the audience consists mainly of ML / DevOps directors or the likes, it makes sense to skip showing the YAML to avoid making Valohai feel complicated. 
 - Back in the UI, show how to create parallel pipelines by using the pipeline level parameters.
     - Change the value of the pipeline parameter called "dataset". Available values:
-        - train (default)
-        - train_harbor_A
-        - train_harbor_B
-        - train_harbor_C
+        - all_harbors
+        - harbor_A
+        - harbor_B
+        - harbor_C
+- Open the preprocess node and show how to change inputs.
+- Open the train node and show how to change the parameter values.
 - Show how to create a trigger to run the pipeline for production runs (hourly, daily, monthly, etc.)
+
+### Fundamentals cheat sheet
+- Each node is "individual and isolated", i.e. they run on individual machines and in isolated Docker containers. 
+- Each node can run on the same instance type or you can select different type for each node if needed (e.g. CPU vs GPU workloads), Valohai will handle scaling the right machine.
+- Each node is versioned: information about the environment (machine and Docker image), inputs, parameters, who ran the job...
+- Valohai versions the outputs of each node, and handles passing them as inputs to the next nodes 
+    - Valohai handles authentication, authorization, downloading and caching of input files. You will only need to tell it which files you want available in your job.
+    - From your codes point of view all these files are local.
+- We’re using datasets that have a collection of images. 
+    - You can show images from Details tab: Click on the eye symbol for the input to show the preview.
+        - Note that this requires using `s3://valohai-demo-library-data/dynamic-pipelines/train/images/*` as the input for preprocessing node, default is a .zip file. 
+- Valohai has a dataset function, a versioned collection of files with human readable names, easy to share across team and update (code, or UI). 
+    - Even if we use “latest” Valohai will version the exact files that were pulled with the data store URLs, it won’t just say “latest” under the Details page.
+    - Dataset is used as an input in the train node.
+- Parameters are either hyperparamerts, or any configuration value (e.g. ship id, patient id)
+    - We can easily then run multiple pipelines with a collection of these different parameters (100 ships ⇒ 100 pipelines) or dynamically scale up/down our pipeline to say (1 pipeline but the number of jobs inside it will depend on number of ships). Just depends do you want to isolate each job or fan out/in all jobs.
+- Metadata can be used for graphing purposes or for edge conditioning (stop pipeline if metadata exceeds certain value).
+    - See train node, plot for example epoch vs accuracy and/or loss.
 
 
 ## Acknowledgements

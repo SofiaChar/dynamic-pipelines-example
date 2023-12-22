@@ -8,7 +8,7 @@
       - name: dataset
         default: s3://valohai-demo-library-data/dynamic-pipelines/train/images.zip
       - name: labels
-        default: s3://valohai-demo-library-data/dynamic-pipelines/train/*.csv
+        default: s3://valohai-demo-library-data/dynamic-pipelines/train/*.csv 
     parameters:
         - name: dataset_names
           default: [harbor_A]
