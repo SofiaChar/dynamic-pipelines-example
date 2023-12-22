@@ -37,11 +37,11 @@ for dataset in dataset_names:
         y = random.randrange(len(test_data))
         test_img.append(y)
 
-    print(predictions[i])
-
     # Save images and predictions
     for i in test_img: 
         plt.imshow(test_data[i])
+
+        print(predictions[i])
         
         for key in category:
             if category[key] == np.argmax(predictions[i])+1:
