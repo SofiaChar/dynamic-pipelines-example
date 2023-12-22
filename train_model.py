@@ -64,9 +64,9 @@ def Mymodel(input_shape , L2):
 model = Mymodel((150,150,3), None)
 model.summary()
 
-history=model.fit(x_train,y_train,validation_data=(x_val,y_val),
-                  batch_size=valohai.parameters('batch_size').value,
-                  epochs=valohai.parameters('epochs').value)
+#history=model.fit(x_train,y_train,validation_data=(x_val,y_val),
+#                  batch_size=valohai.parameters('batch_size').value,
+#                  epochs=valohai.parameters('epochs').value)
 
 # Save the trained model
 suffix = uuid.uuid4()
