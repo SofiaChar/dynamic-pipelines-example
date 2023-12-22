@@ -49,7 +49,7 @@ class ImagePreprocessing:
         return np.array(series)
     
     def splitdata(self,TRAIN_images, LABELS, val_size):
-        X_train , X_val , Y_train , Y_val = train_test_split(TRAIN_images , LABELS , val_size=val_size, random_state=42)
+        X_train , X_val , Y_train , Y_val = train_test_split(TRAIN_images , LABELS , test_size=val_size, random_state=42)
         return X_train , X_val , Y_train , Y_val
     
     def OneHot(self,x):
