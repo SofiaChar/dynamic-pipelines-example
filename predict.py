@@ -1,34 +1,30 @@
 import numpy as np
 import random
-import matplotlib.pyplot as plt
+from PIL import Image
 import os
 from utils.model import load_model
 import valohai
 
 # Define that data and model paths
-dataset_names = valohai.parameters('dataset_names').value
+dataset_names = valohai.parameters("dataset_names").value
 
 # Possible ship categories
-category = {'Cargo': 1, 
-'Military': 2, 
-'Carrier': 3, 
-'Cruise': 4, 
-'Tankers': 5}
+category = {"Cargo": 1, "Military": 2, "Carrier": 3, "Cruise": 4, "Tankers": 5}
 
 for dataset in dataset_names:
-    print('Running predictions for model trained with dataset: ' + dataset)
-    path = valohai.inputs('test_dataset').path('test/'+dataset+'/*')
-    model_paths_all = valohai.inputs('model').paths()
+    print("Running predictions for model trained with dataset: " + dataset)
+    testset_data_path = valohai.inputs("test_dataset").path(f"test/{dataset}/*")
+    model_paths_all = valohai.inputs("model").paths()
 
     # Run predictions for all models provided as inputs
     for model_path in model_paths_all:
         if dataset in model_path:
             model = load_model(model_path)
-            head, tail = os.path.split(model_path)
-            model_name = tail.rstrip(".h5")
+            model_filename = os.path.basename(model_path)
+            model_name = model_filename.rstrip(".h5")
 
-    with np.load(path, allow_pickle=True) as f:
-        test_data = f['test_data']
+    with np.load(testset_data_path, allow_pickle=True) as f:
+        test_data = f["test_data"]
 
     predictions = model.predict(test_data)
 
@@ -39,11 +35,12 @@ for dataset in dataset_names:
         test_img.append(y)
 
     # Save images and predictions
-    for i in test_img: 
-        plt.imshow(test_data[i])
-        
+    for i in test_img:
+        img = Image.fromarray(test_data[i], "RGB")
+
         for key in category:
-            if category[key] == np.argmax(predictions[i])+1:
-                print('Predicted ship type: ' + key)
-                im_path = "predictions/"+model_name+"/" + "img" + str(i) + "_" + key
-                plt.savefig(valohai.outputs().path(im_path))
+            if category[key] == np.argmax(predictions[i]) + 1:
+                print(f"Predicted ship type: {key}")
+                im_path = f"predictions/{model_name}/img{i}_{key}.png"
+
+                img.save(valohai.outputs().path(im_path))

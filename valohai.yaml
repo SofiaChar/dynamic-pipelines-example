@@ -16,7 +16,7 @@
           multiple: separate
           multiple-separator: ','
           optional: false
-        - name: val_size
+        - name: validation_split
           default: 0.3
           type: float
 
@@ -87,7 +87,6 @@
             - name: test_dataset
             - name: model
     edges:
-      - [preprocess.output.preprocessed_data.npz, train.input.dataset]
       - [preprocess.metadata.run_training_for, train.parameter.dataset_name]
       - [preprocess.output.test/*, predictions.input.test_dataset]
       - [train.output.*.h5, predictions.input.model]
